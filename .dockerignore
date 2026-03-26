@@ -1,0 +1,12 @@
+node_modules
+dist
+.angular
+.git
+.gitignore
+data
+tmp-*
+*.log
+*.err.log
+*.cookies.txt
+npm-debug.log*
+compose*.local*

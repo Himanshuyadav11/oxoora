@@ -1,0 +1,253 @@
+.vlog-page {
+  padding: 154px 0 42px;
+}
+
+.vlog-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: 22px;
+  align-items: stretch;
+}
+
+.vlog-hero__copy h1,
+.vlog-section__head .section-title,
+.vlog-cta__panel h2 {
+  max-width: 12ch;
+}
+
+.vlog-hero__actions {
+  margin-top: 28px;
+}
+
+.vlog-player,
+.film-slide,
+.vlog-card,
+.vlog-note,
+.vlog-cta__panel {
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.vlog-player {
+  display: grid;
+  grid-template-rows: minmax(340px, 560px) auto;
+}
+
+.vlog-player__frame {
+  background:
+    radial-gradient(circle at top, rgba(214, 171, 114, 0.14), transparent 55%),
+    #060606;
+}
+
+.vlog-player__frame video,
+.film-slide__visual video,
+.vlog-card__media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vlog-player__meta,
+.film-slide__copy,
+.vlog-card__copy,
+.vlog-note,
+.vlog-cta__panel {
+  padding: 22px;
+}
+
+.vlog-player__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+}
+
+.vlog-player__meta h2,
+.film-slide__copy h3,
+.vlog-card__copy h3,
+.vlog-note h3 {
+  margin: 0 0 12px;
+  font-size: 1.62rem;
+  line-height: 1.06;
+}
+
+.vlog-player__meta p:last-child,
+.film-slide__copy p:last-child,
+.vlog-card__copy p,
+.vlog-note p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.76;
+}
+
+.vlog-section__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+
+.film-rail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.film-slide {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition:
+    transform 0.24s ease,
+    border-color 0.24s ease,
+    box-shadow 0.24s ease;
+}
+
+.film-slide--active {
+  border-color: rgba(214, 171, 114, 0.28);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.36);
+}
+
+.film-slide:hover {
+  transform: translateY(-5px);
+}
+
+.film-slide__button {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.film-slide__visual {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  border-radius: 24px;
+  background: #090909;
+}
+
+.film-slide__visual video {
+  transition: transform 0.6s ease;
+}
+
+.film-slide:hover .film-slide__visual video {
+  transform: scale(1.04);
+}
+
+.film-slide__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 8, 8, 0.1), rgba(8, 8, 8, 0.64));
+}
+
+.film-slide__visual span {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  min-height: 52px;
+  border-radius: 18px;
+  background: rgba(7, 7, 7, 0.72);
+  color: var(--accent-strong);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.film-slide__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.vlog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.vlog-card {
+  display: grid;
+  grid-template-rows: 280px auto;
+}
+
+.vlog-card__media {
+  overflow: hidden;
+}
+
+.vlog-notes__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.vlog-cta {
+  padding-top: 42px;
+}
+
+.vlog-cta__panel h2 {
+  margin: 0 0 22px;
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 4vw, 4.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+@media (max-width: 1180px) {
+  .vlog-hero,
+  .vlog-grid,
+  .vlog-notes__grid,
+  .film-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .vlog-player__meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  .vlog-page {
+    padding-top: 140px;
+  }
+
+  .vlog-section__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 680px) {
+  .vlog-player {
+    grid-template-rows: minmax(260px, 420px) auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .vlog-player__meta,
+  .film-slide__copy,
+  .vlog-card__copy,
+  .vlog-note,
+  .vlog-cta__panel {
+    padding: 18px;
+  }
+
+  .film-slide {
+    padding: 12px;
+  }
+
+  .film-slide__visual {
+    min-height: 220px;
+  }
+}

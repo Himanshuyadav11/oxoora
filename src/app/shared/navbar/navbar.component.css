@@ -1,0 +1,253 @@
+.nav-shell {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+}
+
+.promo-strip {
+  overflow: hidden;
+  background: linear-gradient(90deg, #111111, #1f1b15);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.promo-strip__track {
+  display: flex;
+  gap: 34px;
+  min-width: max-content;
+  padding: 10px 0;
+  animation: promo-marquee 24s linear infinite;
+  will-change: transform;
+}
+
+.promo-strip__track span {
+  position: relative;
+  padding-left: 34px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.promo-strip__track span::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateY(-50%);
+}
+
+.nav {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 28px;
+  padding: 22px clamp(20px, 4vw, 34px);
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+  transition:
+    box-shadow 0.24s ease,
+    background 0.24s ease;
+}
+
+.nav--scrolled {
+  box-shadow: 0 12px 36px rgba(44, 37, 23, 0.08);
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nav__brand-wordmark {
+  display: inline-flex;
+  align-items: flex-end;
+  color: #111111;
+  font-family: var(--font-serif);
+  font-size: clamp(2.3rem, 4.5vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 0.82;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nav__brand-wordmark-part {
+  display: inline-block;
+}
+
+.nav__brand-wordmark-oo {
+  display: inline-flex;
+  margin: 0 -0.06em;
+}
+
+.nav__brand-wordmark-oo span + span {
+  margin-left: -0.22em;
+}
+
+.nav__panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.links a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.links a {
+  position: relative;
+}
+
+.links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--text);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.links a.active::after,
+.links a:hover::after {
+  transform: scaleX(1);
+}
+
+.menu-btn {
+  display: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+.menu-btn span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  margin: 0 auto;
+  background: var(--text);
+  transition: transform 0.2s ease;
+}
+
+.menu-btn span + span {
+  margin-top: 5px;
+}
+
+.nav--open .menu-btn span:first-child {
+  transform: translateY(3.5px) rotate(45deg);
+}
+
+.nav--open .menu-btn span:last-child {
+  transform: translateY(-3.5px) rotate(-45deg);
+}
+
+@keyframes promo-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1020px) {
+  .nav {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 16px 18px;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav__panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 14px;
+    right: 14px;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 20px 60px rgba(44, 37, 23, 0.1);
+  }
+
+  .nav__panel--active {
+    display: flex;
+  }
+
+  .links {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .links a {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .links a:last-child {
+    border-bottom: 0;
+  }
+
+  .links a::after {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .promo-strip__track {
+    gap: 18px;
+  }
+
+  .promo-strip__track span {
+    padding-left: 24px;
+    letter-spacing: 0.16em;
+  }
+
+  .nav__brand-wordmark {
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+  }
+}

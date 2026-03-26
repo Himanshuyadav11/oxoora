@@ -1,0 +1,63 @@
+<div class="products-page">
+  <app-navbar></app-navbar>
+
+  <section class="products-hero page-width">
+    <div class="products-hero__copy">
+      <p class="eyebrow">Products</p>
+      <h1>All luxury belts in one clean shopping space.</h1>
+      <p class="section-copy">
+        Browse every category from bestsellers to new arrivals without the extra sections getting in the way.
+      </p>
+      <div class="products-hero__actions">
+        <a class="lux-button" [href]="'#' + firstCategoryId">Start Shopping</a>
+      </div>
+    </div>
+
+    <article class="products-hero__image surface-card">
+      <img src="assets/editorial/dark-suit-portrait.jpg" alt="Tailored editorial portrait">
+    </article>
+  </section>
+
+  <section class="products-strip">
+    <div class="page-width products-strip__inner">
+      <a *ngFor="let category of categoryOverview" [href]="'#' + category.id">{{ category.title }}</a>
+    </div>
+  </section>
+
+  <section class="products-feature page-width" *ngIf="highlightedProduct as product">
+    <article class="products-feature__image surface-card">
+      <img [src]="product.image" [alt]="product.name">
+    </article>
+    <article class="products-feature__copy surface-card">
+      <p class="eyebrow">Featured</p>
+      <h2>{{ product.name }}</h2>
+      <p>{{ product.description }}</p>
+      <strong>{{ product.price }}</strong>
+      <button class="shop-link" type="button" (click)="openProductLink(product.link)">Shop Now</button>
+    </article>
+  </section>
+
+  <section class="catalog page-width" *ngFor="let section of categorySections" [attr.id]="section.id">
+    <div class="catalog__head">
+      <div>
+        <p class="eyebrow">{{ section.title }}</p>
+        <h2>{{ section.note }}</h2>
+      </div>
+      <span>{{ section.products.length }} products</span>
+    </div>
+
+    <div class="product-grid">
+      <article class="product-card surface-card" *ngFor="let product of section.products">
+        <span class="product-card__badge">{{ section.title }}</span>
+        <div class="product-card__image">
+          <img [src]="product.image" [alt]="product.name">
+        </div>
+        <div class="product-card__copy">
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.price }}</p>
+          <button class="shop-link" type="button" (click)="openProductLink(product.link)">Shop Now</button>
+        </div>
+      </article>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,157 @@
+<app-navbar></app-navbar>
+
+<div class="vlog-page">
+  <section class="vlog-hero page-width">
+    <div class="vlog-hero__copy" appReveal>
+      <p class="eyebrow">Vlog / Motion Reel</p>
+      <h1>A premium film gallery designed to play in order, feel smooth, and stay easy to control.</h1>
+      <p class="section-copy">
+        The heavy product videos now live inside a smarter reel instead of fighting each other on the page. One film is
+        active at a time, hover previews stay lightweight, and every clip can be played, paused, previewed, or downloaded.
+      </p>
+
+      <div class="vlog-hero__actions media-actions">
+        <button class="lux-button" type="button" (click)="toggleActivePlayback()">
+          {{ isMainPlaying ? 'Pause Active Film' : 'Play Active Film' }}
+        </button>
+        <a class="lux-button--ghost" [href]="activeFilm.src" [attr.download]="activeFilm.downloadName">Download Active Film</a>
+      </div>
+    </div>
+
+    <article class="vlog-player surface-card" appReveal [appRevealDelay]="130">
+      <div class="vlog-player__frame">
+        <video
+          #heroPlayer
+          [src]="activeFilm.src"
+          [poster]="activeFilm.poster"
+          controls
+          muted
+          playsinline
+          preload="metadata"
+          (play)="trackActiveState(true)"
+          (pause)="trackActiveState(false)"
+        ></video>
+      </div>
+
+      <div class="vlog-player__meta">
+        <div>
+          <p class="eyebrow">{{ activeFilm.label }}</p>
+          <h2>{{ activeFilm.title }}</h2>
+          <p>{{ activeFilm.copy }}</p>
+        </div>
+        <button class="button-chip" type="button" (click)="openFilmPreview(activeFilm)">Open Full Preview</button>
+      </div>
+    </article>
+  </section>
+
+  <section class="section-shell" id="films">
+    <div class="page-width">
+      <div class="vlog-section__head" appReveal>
+        <div>
+          <p class="eyebrow">Film Selector</p>
+          <h2 class="section-title">Films 01 to 04 stay in sequence, and the active player changes instantly.</h2>
+        </div>
+      </div>
+
+      <div class="film-rail" appReveal [appRevealDelay]="120">
+        <article
+          class="film-slide surface-card"
+          #filmSlide
+          *ngFor="let film of films; let index = index"
+          [class.film-slide--active]="activeFilmIndex === index"
+          (mouseenter)="playPreview(index)"
+          (mouseleave)="stopPreview(index)"
+          (focusin)="playPreview(index)"
+          (focusout)="stopPreview(index)"
+        >
+          <button class="film-slide__button" type="button" (click)="selectFilm(index)">
+            <div class="film-slide__visual">
+              <video
+                #previewPlayer
+                [attr.src]="loadedFilmIds.has(film.id) ? film.src : null"
+                [poster]="film.poster"
+                muted
+                loop
+                playsinline
+                preload="none"
+              ></video>
+              <div class="film-slide__overlay"></div>
+              <span>0{{ film.order }}</span>
+            </div>
+
+            <div class="film-slide__copy">
+              <p class="eyebrow">{{ film.label }}</p>
+              <h3>{{ film.title }}</h3>
+              <p>{{ film.copy }}</p>
+            </div>
+          </button>
+
+          <div class="film-slide__actions">
+            <button class="button-chip" type="button" (click)="openFilmPreview(film)">Preview</button>
+            <a class="button-chip" [href]="film.src" [attr.download]="film.downloadName">Download</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell">
+    <div class="page-width">
+      <div class="vlog-section__head" appReveal>
+        <div>
+          <p class="eyebrow">Behind The Scenes</p>
+          <h2 class="section-title">Smaller supporting clips keep the page rich without overloading the main reel.</h2>
+        </div>
+        <a class="lux-link" routerLink="/about">Read Brand Story</a>
+      </div>
+
+      <div class="vlog-grid">
+        <article
+          class="vlog-card surface-card"
+          *ngFor="let clip of clips; let index = index"
+          appReveal
+          [appRevealDelay]="index * 90"
+        >
+          <div class="vlog-card__media">
+            <video [src]="clip.src" [poster]="clip.poster" autoplay muted loop playsinline preload="metadata"></video>
+          </div>
+
+          <div class="vlog-card__copy">
+            <p class="eyebrow">{{ clip.label }}</p>
+            <h3>{{ clip.title }}</h3>
+            <p>{{ clip.copy }}</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell">
+    <div class="page-width">
+      <div class="vlog-notes__grid">
+        <article
+          class="vlog-note surface-card"
+          *ngFor="let note of notes; let index = index"
+          appReveal
+          [appRevealDelay]="index * 90"
+        >
+          <h3>{{ note.title }}</h3>
+          <p>{{ note.copy }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="vlog-cta page-width" appReveal>
+    <article class="vlog-cta__panel surface-card">
+      <p class="eyebrow">Next Move</p>
+      <h2>Return to the home page for the full product showcase or continue into the brand story.</h2>
+      <div class="media-actions">
+        <a class="lux-button" [routerLink]="['/']" fragment="showcase">Back To Showcase</a>
+        <a class="lux-button--ghost" routerLink="/about">Open About</a>
+      </div>
+    </article>
+  </section>
+
+  <app-media-lightbox [media]="previewMedia" (closed)="closePreview()"></app-media-lightbox>
+</div>

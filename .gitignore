@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.angular/
+.env
+.env.local
+.env.*.local
+tmp-*
+*.log
+*.sqlite-shm
+*.sqlite-wal
+.DS_Store

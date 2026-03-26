@@ -1,0 +1,36 @@
+<section class="media-lightbox" *ngIf="media" (click)="close()">
+  <div class="media-lightbox__backdrop"></div>
+
+  <article class="media-lightbox__dialog" (click)="$event.stopPropagation()">
+    <button class="media-lightbox__close" type="button" (click)="close()" aria-label="Close preview">
+      Close
+    </button>
+
+    <div class="media-lightbox__stage">
+      <video
+        *ngIf="media.type === 'video'; else imageTemplate"
+        [src]="media.src"
+        [poster]="media.poster || null"
+        autoplay
+        controls
+        playsinline
+      ></video>
+
+      <ng-template #imageTemplate>
+        <img [src]="media.src" [alt]="imageAlt">
+      </ng-template>
+    </div>
+
+    <div class="media-lightbox__copy">
+      <div>
+        <p class="eyebrow">{{ media.label }}</p>
+        <h2>{{ media.title }}</h2>
+        <p>{{ media.copy }}</p>
+      </div>
+
+      <a class="lux-button media-lightbox__download" [href]="media.src" [attr.download]="media.downloadName">
+        Download
+      </a>
+    </div>
+  </article>
+</section>

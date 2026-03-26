@@ -1,0 +1,266 @@
+<div class="home-page">
+  <app-navbar></app-navbar>
+
+  <section class="home-hero page-width">
+    <div class="home-hero__carousel surface-card" appReveal>
+      <article
+        class="home-hero__slide"
+        *ngFor="let slide of heroSlides; let index = index"
+        [class.home-hero__slide--active]="activeSlideIndex === index"
+      >
+        <div class="home-hero__image">
+          <img [src]="slide.image" [alt]="slide.alt" [loading]="index === 0 ? 'eager' : 'lazy'">
+        </div>
+
+        <div class="home-hero__overlay"></div>
+
+        <div class="home-hero__content">
+          <div class="home-hero__left">
+            <p class="eyebrow">{{ slide.label }}</p>
+            <h1 class="home-hero__headline">
+              <span>{{ slide.titleLines[0] }}</span>
+              <small *ngIf="slide.titleConnector">{{ slide.titleConnector }}</small>
+              <span>{{ slide.titleLines[1] }}</span>
+            </h1>
+          </div>
+
+          <div class="home-hero__right">
+            <p>{{ slide.promoEyebrow }}</p>
+            <h2>{{ slide.promoTitle }}</h2>
+            <div class="home-hero__actions media-actions">
+              <a class="lux-button" href="#showcase">Shop Now</a>
+              <a class="lux-button--ghost" routerLink="/vlog" fragment="films">Watch Films</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <div class="home-hero__footer">
+        <p>{{ heroSlides[activeSlideIndex].promoCopy }}</p>
+
+        <div class="home-hero__dots">
+          <button
+            type="button"
+            *ngFor="let slide of heroSlides; let index = index"
+            [class.is-active]="activeSlideIndex === index"
+            [attr.aria-label]="'Go to slide ' + (index + 1)"
+            (click)="selectSlide(index)"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-links page-width">
+    <a
+      class="home-links__card surface-card"
+      *ngFor="let category of collectionHighlights; let index = index"
+      appReveal
+      [appRevealDelay]="index * 80"
+      href="#showcase"
+    >
+      <p>{{ category.title }}</p>
+      <span>{{ category.productCount }} styles</span>
+    </a>
+  </section>
+
+  <section class="section-shell" id="showcase">
+    <div class="page-width">
+      <div class="home-section__head" appReveal>
+        <div>
+          <h2 class="section-title">Best sellers</h2>
+        </div>
+        <a class="lux-link" href="#showcase">Shop Now</a>
+      </div>
+
+      <div class="product-grid">
+        <article
+          class="product-card surface-card"
+          *ngFor="let product of featuredProducts; let index = index"
+          appReveal
+          [appRevealDelay]="index * 70"
+        >
+          <div class="product-card__image">
+            <img [src]="product.image" [alt]="product.name" loading="lazy">
+          </div>
+
+          <div class="product-card__copy">
+            <p class="eyebrow">{{ product.categoryTitle }}</p>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+
+            <div class="product-card__purchase">
+              <strong>{{ product.price }}</strong>
+              <a class="product-card__shop" href="#showcase">Shop Now</a>
+            </div>
+
+            <div class="product-card__actions media-actions">
+              <button class="button-chip" type="button" (click)="openPreview(product.preview)">Preview</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell">
+    <div class="page-width">
+      <div class="promo-rail" appReveal>
+        <article
+          class="promo-card"
+          *ngFor="let tile of promoTiles; let index = index"
+          [class.promo-card--ad]="tile.type === 'ad'"
+          appReveal
+            [appRevealDelay]="index * 70"
+          >
+            <div class="promo-card__visual" [ngSwitch]="tile.type">
+              <div class="promo-card__sale" *ngSwitchCase="'ad'">
+                <span class="promo-card__orbit" style="top:-12px;left:-10px;background:#fb4cb7;transform:rotate(-26deg);" aria-hidden="true">Totes</span>
+                <span class="promo-card__orbit" style="top:24px;left:18px;background:#59c4fb;color:#fff;transform:rotate(-62deg);" aria-hidden="true">Briefcases</span>
+                <span class="promo-card__orbit" style="top:18px;right:56px;background:#887cf5;color:#fff;transform:rotate(-64deg);" aria-hidden="true">Backpacks</span>
+                <span class="promo-card__orbit" style="top:58px;right:-18px;background:#f7ef14;transform:rotate(64deg);" aria-hidden="true">Luggage</span>
+                <span class="promo-card__orbit" style="bottom:26px;left:-20px;background:#59c4fb;color:#fff;transform:rotate(-66deg);" aria-hidden="true">Briefcases</span>
+                <span class="promo-card__orbit" style="bottom:12px;right:12px;background:#fb4cb7;color:#fff;transform:rotate(-62deg);" aria-hidden="true">Totes</span>
+                <span class="promo-card__orbit" style="bottom:34px;left:92px;background:#887cf5;color:#fff;transform:rotate(-54deg);" aria-hidden="true">Backpacks</span>
+                <span class="promo-card__orbit" style="bottom:94px;right:82px;background:#f7ef14;transform:rotate(62deg);" aria-hidden="true">Luggage</span>
+
+                <div class="promo-card__badge">
+                  <span class="promo-card__badge-kicker">The</span>
+                  <strong>Secret</strong>
+                  <em>Clearance Sale</em>
+                </div>
+              </div>
+
+              <img *ngSwitchDefault [src]="tile.image" [alt]="tile.title" loading="lazy">
+            </div>
+
+          <div class="promo-card__overlay">
+            <p>{{ tile.label }}</p>
+            <h3>{{ tile.title }}</h3>
+            <span *ngIf="tile.copy">{{ tile.copy }}</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell">
+    <div class="page-width">
+      <div class="home-section__head" appReveal>
+        <div>
+          <h2 class="section-title">More products</h2>
+        </div>
+        <a class="lux-link" href="#showcase">Keep shopping</a>
+      </div>
+
+      <div class="product-grid product-grid--secondary">
+        <article
+          class="product-card surface-card"
+          *ngFor="let product of moreProducts; let index = index"
+          appReveal
+          [appRevealDelay]="index * 70"
+        >
+          <div class="product-card__image">
+            <img [src]="product.image" [alt]="product.name" loading="lazy">
+          </div>
+
+          <div class="product-card__copy">
+            <p class="eyebrow">{{ product.categoryTitle }}</p>
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+
+            <div class="product-card__purchase">
+              <strong>{{ product.price }}</strong>
+              <a class="product-card__shop" href="#showcase">Shop Now</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-benefits">
+    <div class="page-width home-benefits__grid">
+      <article
+        class="home-benefits__card"
+        *ngFor="let benefit of footerBenefits; let index = index"
+        appReveal
+        [appRevealDelay]="index * 70"
+      >
+        <span>{{ benefit.icon }}</span>
+        <h3>{{ benefit.title }}</h3>
+        <p>{{ benefit.copy }}</p>
+      </article>
+    </div>
+  </section>
+
+  <footer class="home-footer" appReveal>
+    <div class="page-width home-footer__grid">
+      <section class="home-footer__newsletter">
+        <h3>Stay close to Oxoora.</h3>
+        <p>Join with your name, phone number, and email so your enquiry is saved for follow-up.</p>
+        <form class="home-footer__signup" [formGroup]="joinUsForm" (ngSubmit)="submitJoinUs()">
+          <input type="text" formControlName="name" placeholder="Name" autocomplete="name">
+          <input type="tel" formControlName="phone" placeholder="Phone number" autocomplete="tel">
+          <input type="email" formControlName="email" placeholder="E-mail" autocomplete="email">
+          <button type="submit" [disabled]="isJoinUsSubmitting">
+            {{ isJoinUsSubmitting ? 'Saving...' : 'Join Us' }}
+          </button>
+        </form>
+        <p
+          class="home-footer__signup-status"
+          [class.home-footer__signup-status--error]="joinUsStatusType === 'error'"
+        >
+          {{ joinUsStatusMessage }}
+        </p>
+      </section>
+
+      <section class="home-footer__column">
+        <h4>Support</h4>
+        <p>Need help with materials, styling, or delivery questions? The Oxoora team is here to guide you.</p>
+      </section>
+
+      <section class="home-footer__column">
+        <h4>Quick Links</h4>
+        <a routerLink="/">Home</a>
+        <a [routerLink]="['/']" fragment="showcase">Shop</a>
+        <a routerLink="/about">About</a>
+        <a routerLink="/vlog">Vlog</a>
+      </section>
+
+      <section class="home-footer__column">
+        <h4>#GoingOxoora</h4>
+        <p>Built for work, travel, gifting, and dressing sharper with less effort.</p>
+        <div class="home-footer__socials">
+          <a
+            class="home-footer__social"
+            *ngFor="let social of socialLinks"
+            [href]="social.href"
+            target="_blank"
+            rel="noreferrer"
+            [attr.aria-label]="social.label"
+          >
+            <ng-container [ngSwitch]="social.icon">
+              <svg *ngSwitchCase="'instagram'" class="icon-stroke" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+                <circle cx="12" cy="12" r="4.2"></circle>
+                <circle cx="17.2" cy="6.8" r="1.2"></circle>
+              </svg>
+              <svg *ngSwitchCase="'facebook'" class="icon-fill" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M13.3 21v-7h2.4l.4-2.8h-2.8V9.4c0-.8.2-1.3 1.4-1.3h1.5V5.6c-.3 0-1.1-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.1H8v2.8h2.3v7h3z"></path>
+              </svg>
+              <svg *ngSwitchCase="'youtube'" class="icon-fill" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21.6 8.2a2.9 2.9 0 0 0-2-2C17.8 5.7 12 5.7 12 5.7s-5.8 0-7.6.5a2.9 2.9 0 0 0-2 2A29.7 29.7 0 0 0 2 12a29.7 29.7 0 0 0 .4 3.8 2.9 2.9 0 0 0 2 2c1.8.5 7.6.5 7.6.5s5.8 0 7.6-.5a2.9 2.9 0 0 0 2-2A29.7 29.7 0 0 0 22 12a29.7 29.7 0 0 0-.4-3.8ZM10 15.3V8.7l5.5 3.3Z"></path>
+              </svg>
+              <svg *ngSwitchCase="'whatsapp'" class="icon-fill" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 11.9A8 8 0 0 1 8.6 19l-4.1 1.1 1.1-4A8 8 0 1 1 20 11.9Zm-4.6 2.3-.6-.3c-.2-.1-.4-.1-.6.1l-.4.5c-.1.1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.1-.2-.1-.4 0-.5l.4-.4c.2-.2.2-.4.1-.6l-.3-.7-.4-1c-.1-.3-.4-.4-.6-.4h-.5c-.2 0-.5.1-.6.3-.3.4-.7 1-.7 1.8s.6 1.7.7 1.8a9.3 9.3 0 0 0 4.2 3.7 10 10 0 0 0 1.4.5c.6.2 1.1.2 1.5.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.3-.2-.5-.3Z"></path>
+              </svg>
+            </ng-container>
+          </a>
+        </div>
+      </section>
+    </div>
+  </footer>
+
+  <app-media-lightbox [media]="previewMedia" (closed)="closePreview()"></app-media-lightbox>
+</div>

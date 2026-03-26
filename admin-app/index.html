@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oxoora Admin</title>
+  <link rel="stylesheet" href="/admin/styles.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="login-panel">
+      <div class="panel-card">
+        <p class="eyebrow">Oxoora Admin</p>
+        <h1>Sign in to manage the collection.</h1>
+        <p class="panel-copy">
+          Use your admin ID and password to open the private dashboard for products, images, pricing, links, and
+          category assignment.
+        </p>
+
+        <form id="loginForm" class="stack">
+          <label>
+            <span>User ID</span>
+            <input type="text" id="username" name="username" autocomplete="username" required>
+          </label>
+
+          <label>
+            <span>Password</span>
+            <div class="password-row">
+              <input type="password" id="password" name="password" autocomplete="current-password" required>
+              <button type="button" id="togglePassword" class="secondary-button inline-button">Show</button>
+            </div>
+          </label>
+
+          <button type="submit">Log In</button>
+        </form>
+
+        <p class="status" id="loginStatus"></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="/admin/login.js"></script>
+</body>
+</html>

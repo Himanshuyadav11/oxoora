@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oxoora Admin Dashboard</title>
+  <link rel="stylesheet" href="/admin/styles.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <section class="dashboard">
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow">Admin Dashboard</p>
+          <h1>Catalog manager</h1>
+          <p class="status" id="sessionStatus"></p>
+        </div>
+
+        <div class="header-actions">
+          <a class="ghost-link" href="/" id="openStoreLink" target="_blank" rel="noopener noreferrer">Open Store</a>
+          <button type="button" id="logoutButton" class="secondary-button">Log Out</button>
+        </div>
+      </header>
+
+      <section class="dashboard-grid">
+        <article class="editor-panel">
+          <div class="panel-top">
+            <div>
+              <p class="eyebrow">Product Form</p>
+              <h2 id="formTitle">Add product</h2>
+            </div>
+            <button type="button" class="secondary-button" id="resetButton">Reset</button>
+          </div>
+
+          <form id="productForm" class="stack">
+            <input type="hidden" id="editingId">
+
+            <label>
+              <span>Product ID</span>
+              <input type="text" id="productId" required>
+            </label>
+
+            <label>
+              <span>Product name</span>
+              <input type="text" id="productName" required>
+            </label>
+
+            <label>
+              <span>Price</span>
+              <input type="text" id="productPrice" required>
+            </label>
+
+            <label>
+              <span>Description</span>
+              <textarea id="productDescription" rows="4" required></textarea>
+            </label>
+
+            <label>
+              <span>Buy link</span>
+              <input type="text" id="productLink" required>
+            </label>
+
+            <label>
+              <span>Image path</span>
+              <input type="text" id="productImage" placeholder="/product-uploads/your-image.jpg" required>
+            </label>
+
+            <label>
+              <span>Upload image to product-uploads</span>
+              <input type="file" id="productFile" accept="image/*">
+            </label>
+
+            <div class="preview-card">
+              <span>Image preview</span>
+              <img id="imagePreview" alt="Preview">
+            </div>
+
+            <fieldset class="categories-box">
+              <legend>Categories</legend>
+              <div id="categoryOptions" class="categories-list"></div>
+            </fieldset>
+
+            <button type="submit" id="saveButton">Save Product</button>
+            <p class="status" id="formStatus"></p>
+          </form>
+        </article>
+
+        <div class="dashboard-stack">
+          <article class="list-panel">
+            <div class="panel-top">
+              <div>
+                <p class="eyebrow">Products</p>
+                <h2>Current catalog</h2>
+              </div>
+            </div>
+
+            <div class="product-list" id="productList"></div>
+          </article>
+
+          <article class="list-panel">
+            <div class="panel-top">
+              <div>
+                <p class="eyebrow">Join Us</p>
+                <h2>Leads and enquiries</h2>
+              </div>
+              <a class="ghost-link" href="/api/leads/export" id="exportLeadsLink">Export Excel</a>
+            </div>
+
+            <div class="lead-list" id="leadList"></div>
+          </article>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/admin/dashboard.js"></script>
+</body>
+</html>

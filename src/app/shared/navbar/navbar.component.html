@@ -1,0 +1,41 @@
+<header class="nav-shell">
+  <div class="promo-strip">
+    <div class="promo-strip__track">
+      <span *ngFor="let item of promoItems">{{ item }}</span>
+      <span *ngFor="let item of promoItems">{{ item }}</span>
+    </div>
+  </div>
+
+  <nav class="nav" [class.nav--open]="open" [class.nav--scrolled]="isScrolled">
+    <a class="nav__brand" routerLink="" (click)="close()" aria-label="Oxoora home">
+      <span class="nav__brand-wordmark" aria-hidden="true">
+        <span class="nav__brand-wordmark-part">OX</span>
+        <span class="nav__brand-wordmark-oo">
+          <span>O</span>
+          <span>O</span>
+        </span>
+        <span class="nav__brand-wordmark-part">RA</span>
+      </span>
+    </a>
+
+    <div class="nav__panel" [class.nav__panel--active]="open">
+      <div class="links">
+        <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="close()">Home</a>
+        <a [routerLink]="['/']" fragment="showcase" (click)="close()">Shop</a>
+        <a routerLink="/about" routerLinkActive="active" (click)="close()">About</a>
+        <a routerLink="/vlog" routerLinkActive="active" (click)="close()">Vlog</a>
+      </div>
+    </div>
+
+    <button
+      class="menu-btn"
+      type="button"
+      aria-label="Toggle navigation menu"
+      [attr.aria-expanded]="open"
+      (click)="toggleMenu()"
+    >
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+</header>

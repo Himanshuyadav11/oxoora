@@ -1,0 +1,20 @@
+services:
+  oxoora:
+    image: ${IMAGE_NAME}
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATA_DIR: /app/data
+      UPLOAD_DIR: /app/product-uploads
+      ADMIN_ID: ${ADMIN_ID}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+      - oxoora-data:/app/data
+      - oxoora-uploads:/app/product-uploads
+
+volumes:
+  oxoora-data:
+  oxoora-uploads:

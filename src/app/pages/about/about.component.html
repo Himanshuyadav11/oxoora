@@ -1,0 +1,152 @@
+<app-navbar></app-navbar>
+
+<div class="about-page">
+  <section class="about-hero page-width">
+    <div class="about-hero__copy" appReveal>
+      <p class="eyebrow">About Oxoora</p>
+      <h1>A premium accessories brand needs a digital experience with the same level of restraint as the product itself.</h1>
+      <p class="section-copy">
+        This page positions Oxoora as a more elevated label: darker tones, larger editorial moments, stronger hierarchy,
+        and a clearer explanation of what the brand stands for without adding unnecessary complexity.
+      </p>
+
+      <div class="about-hero__actions media-actions">
+        <a class="lux-button" [routerLink]="['/']" fragment="showcase">Browse Products</a>
+        <a class="lux-button--ghost" routerLink="/vlog">Open Vlog Page</a>
+      </div>
+    </div>
+
+    <article class="about-hero__visual surface-card" appReveal [appRevealDelay]="120">
+      <img
+        src="assets/editorial/hero-suit-portrait.jpg"
+        alt="Luxury tailored portrait"
+        loading="eager"
+        [appParallax]="0.07"
+      >
+      <div class="about-hero__visual-copy">
+        <p class="eyebrow">Brand Mood</p>
+        <h2>Sharp tailoring, rich materials, and a calmer presentation.</h2>
+      </div>
+    </article>
+  </section>
+
+  <section class="about-stats page-width">
+    <article
+      class="about-stats__card surface-card"
+      *ngFor="let stat of stats; let index = index"
+      appReveal
+      [appRevealDelay]="index * 90"
+    >
+      <strong>{{ stat.value }}</strong>
+      <p>{{ stat.label }}</p>
+    </article>
+  </section>
+
+  <section class="section-shell">
+    <div class="page-width">
+      <div class="about-section__head" appReveal>
+        <div>
+          <p class="eyebrow">What Changed</p>
+          <h2 class="section-title">The site now behaves like a luxury brand, but it still stays easy to use.</h2>
+        </div>
+      </div>
+
+      <div class="about-pillars">
+        <article
+          class="about-pillars__card surface-card"
+          *ngFor="let pillar of pillars; let index = index"
+          appReveal
+          [appRevealDelay]="index * 90"
+        >
+          <p class="eyebrow">{{ pillar.label }}</p>
+          <h3>{{ pillar.title }}</h3>
+          <p>{{ pillar.copy }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell">
+    <div class="page-width about-story">
+      <article class="about-story__manifesto surface-card" appReveal>
+        <p class="eyebrow">Brand Manifesto</p>
+        <h2 class="section-title">Good luxury design should feel effortless to move through.</h2>
+        <p class="section-copy">
+          Oxoora now presents its catalog with more control: fewer distractions, better contrast, and a stronger
+          relationship between product media, written copy, and navigation.
+        </p>
+        <blockquote>
+          “The product should carry the confidence. The interface should remove hesitation.”
+        </blockquote>
+      </article>
+
+      <div class="about-story__steps">
+        <article
+          class="about-story__step surface-card"
+          *ngFor="let step of steps; let index = index"
+          appReveal
+          [appRevealDelay]="index * 120"
+        >
+          <span>{{ step.label }}</span>
+          <div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.copy }}</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-shell">
+    <div class="page-width">
+      <div class="about-section__head" appReveal>
+        <div>
+          <p class="eyebrow">Editorial Assets</p>
+          <h2 class="section-title">Reusable brand photography, upgraded with preview and download actions.</h2>
+        </div>
+      </div>
+
+      <div class="about-gallery">
+        <article
+          class="about-gallery__card surface-card"
+          *ngFor="let image of gallery; let index = index"
+          appReveal
+          [appRevealDelay]="index * 80"
+        >
+          <div class="about-gallery__media">
+            <img [src]="image.src" [alt]="image.alt" loading="lazy">
+          </div>
+
+          <div class="about-gallery__copy">
+            <p class="eyebrow">{{ image.label }}</p>
+            <h3>{{ image.title }}</h3>
+            <p>{{ image.copy }}</p>
+            <div class="media-actions">
+              <button
+                class="button-chip"
+                type="button"
+                (click)="openPreview({ type: 'image', id: image.id, label: image.label, title: image.title, copy: image.copy, src: image.src, alt: image.alt, downloadName: image.downloadName })"
+              >
+                Preview
+              </button>
+              <a class="button-chip" [href]="image.src" [attr.download]="image.downloadName">Download</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="about-cta page-width" appReveal>
+    <article class="about-cta__panel surface-card">
+      <p class="eyebrow">Next Move</p>
+      <h2>Continue into the film reel for the motion-led side of the brand experience.</h2>
+      <div class="media-actions">
+        <a class="lux-button" routerLink="/vlog">Go To Vlog</a>
+        <a class="lux-button--ghost" [routerLink]="['/']" fragment="showcase">Back To Showcase</a>
+      </div>
+    </article>
+  </section>
+
+  <app-media-lightbox [media]="previewMedia" (closed)="closePreview()"></app-media-lightbox>
+</div>

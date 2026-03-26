@@ -1,0 +1,156 @@
+{
+  "categories": [
+    {
+      "id": "top-sellers",
+      "title": "Top Sellers",
+      "note": "Our most-requested leather belts for work, occasion wear, and gifting."
+    },
+    {
+      "id": "recently-added",
+      "title": "New Arrivals",
+      "note": "Fresh additions with cleaner buckles, softer tones, and polished detailing."
+    },
+    {
+      "id": "trending",
+      "title": "Trending Now",
+      "note": "The styles currently drawing the most attention across the collection."
+    },
+    {
+      "id": "other",
+      "title": "Complete The Rotation",
+      "note": "Versatile supporting styles built for daily wear and effortless pairing."
+    },
+    {
+      "id": "featured-pieces",
+      "title": "Featured Pieces",
+      "note": "Products highlighted on the home page.",
+      "showOnProductPage": false
+    }
+  ],
+  "products": [
+    {
+      "id": "oxford-black",
+      "name": "Oxford Black",
+      "price": "Rs. 2,490",
+      "image": "assets/product%20image/p1.jpg",
+      "description": "A sharp matte-black staple with a slim silver buckle and a clean dress-belt profile.",
+      "link": "#",
+      "categories": [
+        "top-sellers",
+        "trending",
+        "featured-pieces"
+      ]
+    },
+    {
+      "id": "saddle-brown",
+      "name": "Saddle Brown",
+      "price": "Rs. 2,690",
+      "image": "assets/product%20image/p2.jpg",
+      "description": "Warm brown leather with a softly textured finish built for denim, chinos, and daily wear.",
+      "link": "#",
+      "categories": [
+        "top-sellers",
+        "recently-added",
+        "featured-pieces"
+      ]
+    },
+    {
+      "id": "atelier-woven",
+      "name": "Atelier Woven",
+      "price": "Rs. 2,850",
+      "image": "assets/product%20image/p3.jpg",
+      "description": "Interlaced leather detailing that adds richer texture without overpowering a polished outfit.",
+      "link": "#",
+      "categories": [
+        "recently-added",
+        "other"
+      ]
+    },
+    {
+      "id": "foundry-buckle",
+      "name": "Foundry Buckle",
+      "price": "Rs. 2,990",
+      "image": "assets/product%20image/p4.jpg",
+      "description": "Smooth chestnut leather paired with a bold square buckle for a sharper, more modern finish.",
+      "link": "#",
+      "categories": [
+        "recently-added",
+        "other"
+      ]
+    },
+    {
+      "id": "metro-duo",
+      "name": "Metro Duo",
+      "price": "Rs. 3,190",
+      "image": "assets/product%20image/p5.jpg",
+      "description": "Statement hardware and a versatile two-tone presentation for a cleaner contemporary wardrobe.",
+      "link": "#",
+      "categories": [
+        "top-sellers",
+        "other",
+        "featured-pieces"
+      ]
+    },
+    {
+      "id": "meridian-red",
+      "name": "Meridian Red",
+      "price": "Rs. 3,290",
+      "image": "assets/product%20image/p6.jpg",
+      "description": "A crocodile-texture statement belt in rich red for standout evening looks and premium gifting.",
+      "link": "#",
+      "categories": [
+        "recently-added",
+        "trending",
+        "featured-pieces"
+      ]
+    },
+    {
+      "id": "brassline-heritage",
+      "name": "Brassline Heritage",
+      "price": "Rs. 2,740",
+      "image": "assets/product%20image/p7.jpg",
+      "description": "Close-cut leather grain and aged brass tones bring an artisanal edge to casual tailoring.",
+      "link": "#",
+      "categories": [
+        "trending",
+        "other"
+      ]
+    },
+    {
+      "id": "grainline-brown",
+      "name": "Grainline Brown",
+      "price": "Rs. 2,920",
+      "image": "assets/product%20image/p8.jpg",
+      "description": "Visible stitching and broken-in texture make this one feel rugged, premium, and easy to style.",
+      "link": "#",
+      "categories": [
+        "top-sellers",
+        "other"
+      ]
+    },
+    {
+      "id": "western-edge",
+      "name": "Western Edge",
+      "price": "Rs. 3,050",
+      "image": "assets/product%20image/p9.jpg",
+      "description": "Stronger hardware and a bolder belt posture for wardrobes that lean more confident and directional.",
+      "link": "#",
+      "categories": [
+        "recently-added",
+        "trending"
+      ]
+    },
+    {
+      "id": "eclipse-buckle",
+      "name": "Eclipse Buckle",
+      "price": "Rs. 2,780",
+      "image": "assets/product%20image/p10.jpg",
+      "description": "Minimal black leather with a crisp silver buckle that moves easily from office wear to occasion dressing.",
+      "link": "#",
+      "categories": [
+        "top-sellers",
+        "other"
+      ]
+    }
+  ]
+}
