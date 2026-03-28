@@ -28,8 +28,8 @@
             <p>{{ slide.promoEyebrow }}</p>
             <h2>{{ slide.promoTitle }}</h2>
             <div class="home-hero__actions media-actions">
-              <a class="lux-button" href="#showcase">Shop Now</a>
-              <a class="lux-button--ghost" routerLink="/vlog" fragment="films">Watch Films</a>
+              <a class="lux-button" [routerLink]="['/']" fragment="showcase">Browse Products</a>
+              <a class="lux-button--ghost" routerLink="/about">Open About</a>
             </div>
           </div>
         </div>
@@ -57,7 +57,8 @@
       *ngFor="let category of collectionHighlights; let index = index"
       appReveal
       [appRevealDelay]="index * 80"
-      href="#showcase"
+      [routerLink]="['/']"
+      fragment="showcase"
     >
       <p>{{ category.title }}</p>
       <span>{{ category.productCount }} styles</span>
@@ -66,17 +67,24 @@
 
   <section class="section-shell" id="showcase">
     <div class="page-width">
-      <div class="home-section__head" appReveal>
+      <div class="home-section__head home-section__head--catalog" appReveal>
         <div>
-          <h2 class="section-title">Best sellers</h2>
+          <p class="eyebrow">Oxoora Collection</p>
+          <h2 class="section-title">Discover all {{ totalProducts }} styles in one place.</h2>
         </div>
-        <a class="lux-link" href="#showcase">Shop Now</a>
+
+        <div class="home-section__intro">
+          <p>
+            A sharper, simpler way to browse every piece, compare finishes, and open the full product preview without
+            leaving the page.
+          </p>
+        </div>
       </div>
 
-      <div class="product-grid">
+      <div class="product-grid product-grid--secondary" *ngIf="topProducts.length > 0">
         <article
           class="product-card surface-card"
-          *ngFor="let product of featuredProducts; let index = index"
+          *ngFor="let product of topProducts; let index = index"
           appReveal
           [appRevealDelay]="index * 70"
         >
@@ -91,72 +99,49 @@
 
             <div class="product-card__purchase">
               <strong>{{ product.price }}</strong>
-              <a class="product-card__shop" href="#showcase">Shop Now</a>
-            </div>
-
-            <div class="product-card__actions media-actions">
-              <button class="button-chip" type="button" (click)="openPreview(product.preview)">Preview</button>
+              <a class="product-card__shop" [routerLink]="['/products', product.id]">View Product</a>
             </div>
           </div>
         </article>
       </div>
-    </div>
-  </section>
 
-  <section class="section-shell">
-    <div class="page-width">
-      <div class="promo-rail" appReveal>
+      <div class="media-strip" *ngIf="homeFeatureCards.length > 0" appReveal>
         <article
-          class="promo-card"
-          *ngFor="let tile of promoTiles; let index = index"
-          [class.promo-card--ad]="tile.type === 'ad'"
+          class="media-strip__card"
+          *ngFor="let card of homeFeatureCards; let index = index"
           appReveal
-            [appRevealDelay]="index * 70"
-          >
-            <div class="promo-card__visual" [ngSwitch]="tile.type">
-              <div class="promo-card__sale" *ngSwitchCase="'ad'">
-                <span class="promo-card__orbit" style="top:-12px;left:-10px;background:#fb4cb7;transform:rotate(-26deg);" aria-hidden="true">Totes</span>
-                <span class="promo-card__orbit" style="top:24px;left:18px;background:#59c4fb;color:#fff;transform:rotate(-62deg);" aria-hidden="true">Briefcases</span>
-                <span class="promo-card__orbit" style="top:18px;right:56px;background:#887cf5;color:#fff;transform:rotate(-64deg);" aria-hidden="true">Backpacks</span>
-                <span class="promo-card__orbit" style="top:58px;right:-18px;background:#f7ef14;transform:rotate(64deg);" aria-hidden="true">Luggage</span>
-                <span class="promo-card__orbit" style="bottom:26px;left:-20px;background:#59c4fb;color:#fff;transform:rotate(-66deg);" aria-hidden="true">Briefcases</span>
-                <span class="promo-card__orbit" style="bottom:12px;right:12px;background:#fb4cb7;color:#fff;transform:rotate(-62deg);" aria-hidden="true">Totes</span>
-                <span class="promo-card__orbit" style="bottom:34px;left:92px;background:#887cf5;color:#fff;transform:rotate(-54deg);" aria-hidden="true">Backpacks</span>
-                <span class="promo-card__orbit" style="bottom:94px;right:82px;background:#f7ef14;transform:rotate(62deg);" aria-hidden="true">Luggage</span>
+          [appRevealDelay]="index * 70"
+        >
+          <a class="media-strip__link" [routerLink]="['/products', card.id]">
+            <div class="media-strip__visual">
+              <video
+                *ngIf="card.mediaType === 'video'; else stripImage"
+                [src]="card.mediaSrc"
+                [poster]="card.mediaPoster"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+              ></video>
 
-                <div class="promo-card__badge">
-                  <span class="promo-card__badge-kicker">The</span>
-                  <strong>Secret</strong>
-                  <em>Clearance Sale</em>
-                </div>
-              </div>
-
-              <img *ngSwitchDefault [src]="tile.image" [alt]="tile.title" loading="lazy">
+              <ng-template #stripImage>
+                <img [src]="card.mediaSrc" [alt]="card.name" loading="lazy">
+              </ng-template>
             </div>
 
-          <div class="promo-card__overlay">
-            <p>{{ tile.label }}</p>
-            <h3>{{ tile.title }}</h3>
-            <span *ngIf="tile.copy">{{ tile.copy }}</span>
-          </div>
+            <div class="media-strip__overlay">
+              <p>{{ card.cardLabel }}</p>
+              <h3>{{ card.cardHeadline }}</h3>
+            </div>
+          </a>
         </article>
       </div>
-    </div>
-  </section>
 
-  <section class="section-shell">
-    <div class="page-width">
-      <div class="home-section__head" appReveal>
-        <div>
-          <h2 class="section-title">More products</h2>
-        </div>
-        <a class="lux-link" href="#showcase">Keep shopping</a>
-      </div>
-
-      <div class="product-grid product-grid--secondary">
+      <div class="product-grid product-grid--secondary" *ngIf="bottomProducts.length > 0">
         <article
           class="product-card surface-card"
-          *ngFor="let product of moreProducts; let index = index"
+          *ngFor="let product of bottomProducts; let index = index"
           appReveal
           [appRevealDelay]="index * 70"
         >
@@ -171,7 +156,7 @@
 
             <div class="product-card__purchase">
               <strong>{{ product.price }}</strong>
-              <a class="product-card__shop" href="#showcase">Shop Now</a>
+              <a class="product-card__shop" [routerLink]="['/products', product.id]">View Product</a>
             </div>
           </div>
         </article>
@@ -223,9 +208,9 @@
       <section class="home-footer__column">
         <h4>Quick Links</h4>
         <a routerLink="/">Home</a>
-        <a [routerLink]="['/']" fragment="showcase">Shop</a>
+        <a [routerLink]="['/']" fragment="showcase">Products</a>
         <a routerLink="/about">About</a>
-        <a routerLink="/vlog">Vlog</a>
+        <a routerLink="/blog">Blog</a>
       </section>
 
       <section class="home-footer__column">
@@ -261,6 +246,4 @@
       </section>
     </div>
   </footer>
-
-  <app-media-lightbox [media]="previewMedia" (closed)="closePreview()"></app-media-lightbox>
 </div>

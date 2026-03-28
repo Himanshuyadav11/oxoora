@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BRAND_IMAGES, PreviewMedia } from '../../data/brand-media';
+import { BRAND_IMAGES } from '../../data/brand-media';
 
 type AboutPillar = {
   label: string;
@@ -24,8 +24,6 @@ type AboutStat = {
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent {
-  previewMedia: PreviewMedia | null = null;
-
   readonly gallery = BRAND_IMAGES;
   readonly pillars: AboutPillar[] = [
     {
@@ -36,7 +34,7 @@ export class AboutComponent {
     {
       label: 'Navigation',
       title: 'Fast to understand',
-      copy: 'Home, About, and Vlog now connect naturally instead of sending visitors through scattered, confusing paths.'
+      copy: 'Home, About, and Blog now connect naturally, with products centered on the home page instead of a separate shop route.'
     },
     {
       label: 'Performance',
@@ -65,15 +63,7 @@ export class AboutComponent {
     {
       label: '03',
       title: 'Keep the path obvious',
-      copy: 'Every page offers a clear next move, so the user always knows whether to continue exploring, preview media, or return home.'
+      copy: 'Every page offers a clear next move, so the user always knows whether to continue exploring or return home.'
     }
   ];
-
-  openPreview(media: PreviewMedia): void {
-    this.previewMedia = media;
-  }
-
-  closePreview(): void {
-    this.previewMedia = null;
-  }
 }

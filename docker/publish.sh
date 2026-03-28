@@ -6,7 +6,7 @@ TAG="${2:-latest}"
 PLATFORM="${3:-linux/amd64}"
 
 if [ -z "$IMAGE_NAME" ]; then
-  echo "Usage: ./docker-publish.sh yourdockerhubname/oxoora [tag] [platform]"
+  echo "Usage: ./publish.sh yourdockerhubname/oxoora [tag] [platform]"
   exit 1
 fi
 
@@ -15,11 +15,13 @@ if ! docker info >/dev/null 2>&1; then
   exit 1
 fi
 
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+REPO_ROOT="$(CDPATH= cd -- "${SCRIPT_DIR}/.." && pwd)"
+DOCKERFILE="${SCRIPT_DIR}/Dockerfile"
 FULL_TAG="${IMAGE_NAME}:${TAG}"
-DOCKERFILE="docker/Dockerfile"
 
 echo "Building ${FULL_TAG} ..."
-docker build --platform "${PLATFORM}" -f "${DOCKERFILE}" -t "${FULL_TAG}" .
+docker build --platform "${PLATFORM}" -f "${DOCKERFILE}" -t "${FULL_TAG}" "${REPO_ROOT}"
 
 if [ "$TAG" != "latest" ]; then
   echo "Tagging ${IMAGE_NAME}:latest ..."

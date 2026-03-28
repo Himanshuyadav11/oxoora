@@ -12,7 +12,7 @@
 
       <div class="about-hero__actions media-actions">
         <a class="lux-button" [routerLink]="['/']" fragment="showcase">Browse Products</a>
-        <a class="lux-button--ghost" routerLink="/vlog">Open Vlog Page</a>
+        <a class="lux-button--ghost" routerLink="/blog">Open Blog Page</a>
       </div>
     </div>
 
@@ -102,7 +102,7 @@
       <div class="about-section__head" appReveal>
         <div>
           <p class="eyebrow">Editorial Assets</p>
-          <h2 class="section-title">Reusable brand photography, upgraded with preview and download actions.</h2>
+          <h2 class="section-title">Reusable brand photography presented in a cleaner, simpler way.</h2>
         </div>
       </div>
 
@@ -121,16 +121,6 @@
             <p class="eyebrow">{{ image.label }}</p>
             <h3>{{ image.title }}</h3>
             <p>{{ image.copy }}</p>
-            <div class="media-actions">
-              <button
-                class="button-chip"
-                type="button"
-                (click)="openPreview({ type: 'image', id: image.id, label: image.label, title: image.title, copy: image.copy, src: image.src, alt: image.alt, downloadName: image.downloadName })"
-              >
-                Preview
-              </button>
-              <a class="button-chip" [href]="image.src" [attr.download]="image.downloadName">Download</a>
-            </div>
           </div>
         </article>
       </div>
@@ -142,11 +132,9 @@
       <p class="eyebrow">Next Move</p>
       <h2>Continue into the film reel for the motion-led side of the brand experience.</h2>
       <div class="media-actions">
-        <a class="lux-button" routerLink="/vlog">Go To Vlog</a>
+        <a class="lux-button" routerLink="/blog">Go To Blog</a>
         <a class="lux-button--ghost" [routerLink]="['/']" fragment="showcase">Back To Showcase</a>
       </div>
     </article>
   </section>
-
-  <app-media-lightbox [media]="previewMedia" (closed)="closePreview()"></app-media-lightbox>
 </div>

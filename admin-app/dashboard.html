@@ -7,12 +7,15 @@
   <link rel="stylesheet" href="/admin/styles.css">
 </head>
 <body>
-  <main class="admin-shell">
+  <main class="admin-shell admin-shell--dashboard">
     <section class="dashboard">
-      <header class="dashboard-header">
-        <div>
+      <header class="dashboard-hero panel-card">
+        <div class="dashboard-hero__copy">
           <p class="eyebrow">Admin Dashboard</p>
-          <h1>Catalog manager</h1>
+          <h1>Collection control room.</h1>
+          <p class="panel-copy">
+            Manage product details, gallery images, prices, and collection content from one clean place.
+          </p>
           <p class="status" id="sessionStatus"></p>
         </div>
 
@@ -22,63 +25,238 @@
         </div>
       </header>
 
+      <section class="dashboard-summary">
+        <article class="summary-card panel-card">
+          <span>Total products</span>
+          <strong id="statProducts">0</strong>
+          <p>Items currently saved in your catalog.</p>
+        </article>
+
+        <article class="summary-card panel-card">
+          <span>Categories</span>
+          <strong id="statCategories">0</strong>
+          <p>Active groups used across the site.</p>
+        </article>
+
+        <article class="summary-card panel-card">
+          <span>Gallery images</span>
+          <strong id="statGalleryImages">0</strong>
+          <p>Extra product images stored for previews.</p>
+        </article>
+
+        <article class="summary-card panel-card">
+          <span>Leads</span>
+          <strong id="statLeads">0</strong>
+          <p>Join Us submissions collected from the site.</p>
+        </article>
+
+        <article class="summary-card panel-card">
+          <span>Media strip</span>
+          <strong id="statHomeStrip">0</strong>
+          <p>Products selected for the image and video strip.</p>
+        </article>
+      </section>
+
       <section class="dashboard-grid">
         <article class="editor-panel">
           <div class="panel-top">
             <div>
-              <p class="eyebrow">Product Form</p>
+              <p class="eyebrow">Product Editor</p>
               <h2 id="formTitle">Add product</h2>
             </div>
             <button type="button" class="secondary-button" id="resetButton">Reset</button>
           </div>
 
+          <p class="section-copy-admin section-copy-admin--lead">
+            Add clean product information here for the storefront, product preview page, pricing, and gallery images.
+          </p>
+
           <form id="productForm" class="stack">
             <input type="hidden" id="editingId">
 
-            <label>
-              <span>Product ID</span>
-              <input type="text" id="productId" required>
-            </label>
+            <section class="form-section">
+              <p class="eyebrow">Basic Details</p>
+              <div class="form-grid">
+                <label>
+                  <span>Product ID</span>
+                  <input type="text" id="productId" required>
+                </label>
 
-            <label>
-              <span>Product name</span>
-              <input type="text" id="productName" required>
-            </label>
+                <label>
+                  <span>Product name</span>
+                  <input type="text" id="productName" required>
+                </label>
 
-            <label>
-              <span>Price</span>
-              <input type="text" id="productPrice" required>
-            </label>
+                <label>
+                  <span>Selling price</span>
+                  <input type="text" id="productPrice" required>
+                </label>
 
-            <label>
-              <span>Description</span>
-              <textarea id="productDescription" rows="4" required></textarea>
-            </label>
+                <label>
+                  <span>Compare price</span>
+                  <input type="text" id="productComparePrice" placeholder="Optional MRP">
+                </label>
 
-            <label>
-              <span>Buy link</span>
-              <input type="text" id="productLink" required>
-            </label>
+                <label>
+                  <span>Color name</span>
+                  <input type="text" id="productColorName" placeholder="Black, Brown, Tan">
+                </label>
 
-            <label>
-              <span>Image path</span>
-              <input type="text" id="productImage" placeholder="/product-uploads/your-image.jpg" required>
-            </label>
+                <label>
+                  <span>Delivery text</span>
+                  <input type="text" id="productDeliveryText" placeholder="Expected delivery details">
+                </label>
+              </div>
+            </section>
 
-            <label>
-              <span>Upload image to product-uploads</span>
-              <input type="file" id="productFile" accept="image/*">
-            </label>
+            <section class="form-section">
+              <p class="eyebrow">Content</p>
+              <div class="form-grid form-grid--single">
+                <label>
+                  <span>Short description</span>
+                  <textarea id="productDescription" rows="3" required></textarea>
+                </label>
 
-            <div class="preview-card">
-              <span>Image preview</span>
-              <img id="imagePreview" alt="Preview">
-            </div>
+                <label>
+                  <span>Description section</span>
+                  <textarea id="productDetails" rows="4" placeholder="Shown in the Description accordion"></textarea>
+                </label>
 
-            <fieldset class="categories-box">
-              <legend>Categories</legend>
-              <div id="categoryOptions" class="categories-list"></div>
-            </fieldset>
+                <label>
+                  <span>Warranty & Returns</span>
+                  <textarea id="productWarranty" rows="4"></textarea>
+                </label>
+
+                <label>
+                  <span>More information</span>
+                  <textarea id="productMoreInformation" rows="4"></textarea>
+                </label>
+
+                <label>
+                  <span>Buy link</span>
+                  <input type="text" id="productLink" required>
+                </label>
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="panel-top">
+                <div>
+                  <p class="eyebrow">Main Image</p>
+                  <h3>Primary product visual</h3>
+                </div>
+              </div>
+
+              <p class="section-copy-admin">
+                This image appears on the product card and the product preview page.
+              </p>
+
+              <div class="form-grid">
+                <label>
+                  <span>Main image path</span>
+                  <input type="text" id="productImage" placeholder="/product-uploads/main-image.jpg" required>
+                </label>
+
+                <label>
+                  <span>Upload main image</span>
+                  <input type="file" id="productFile" accept="image/*">
+                </label>
+              </div>
+
+              <div class="preview-card">
+                <span>Main image preview</span>
+                <img id="imagePreview" alt="Main product preview">
+              </div>
+            </section>
+
+            <section class="form-section">
+              <div class="panel-top">
+                <div>
+                  <p class="eyebrow">Gallery</p>
+                  <h3>More product images</h3>
+                </div>
+                <button type="button" class="secondary-button" id="addGalleryButton">Add Image</button>
+              </div>
+
+              <p class="section-copy-admin">
+                Add 3 to 4 product images here. Later you can also add more images for other colors of the same product.
+              </p>
+
+              <div id="galleryList" class="gallery-list"></div>
+            </section>
+
+            <section class="form-section">
+              <fieldset class="categories-box">
+                <legend>Categories</legend>
+                <div id="categoryOptions" class="categories-list"></div>
+              </fieldset>
+            </section>
+
+            <section class="form-section form-section--feature">
+              <div class="panel-top">
+                <div>
+                  <p class="eyebrow">Media Strip</p>
+                  <h3>Show this product between product rows</h3>
+                </div>
+              </div>
+
+              <p class="section-copy-admin">
+                Turn this on to place this product inside the image and video strip shown between the first and second
+                product rows on the home page.
+              </p>
+
+              <label class="checkbox-row">
+                <input type="checkbox" id="showOnHomePage">
+                <span>Use this product in the home media strip</span>
+              </label>
+
+              <div class="form-grid form-grid--single">
+                <label>
+                  <span>Card headline</span>
+                  <input type="text" id="homeHeadline" placeholder="Large title shown on the media card">
+                </label>
+
+                <label>
+                  <span>Card label</span>
+                  <input type="text" id="homeCopy" placeholder="Small text shown above the title">
+                </label>
+              </div>
+
+              <div class="form-grid">
+                <label>
+                  <span>Media type</span>
+                  <select id="homeMediaType">
+                    <option value="image">Image</option>
+                    <option value="video">Video</option>
+                  </select>
+                </label>
+
+                <label>
+                  <span>Media path</span>
+                  <input type="text" id="homeMediaPath" placeholder="/product-uploads/strip-media.mp4">
+                </label>
+
+                <label>
+                  <span>Upload strip image or video</span>
+                  <input type="file" id="homeMediaFile" accept="image/*,video/*">
+                </label>
+
+                <label>
+                  <span>Video poster path</span>
+                  <input type="text" id="homeMediaPoster" placeholder="/product-uploads/strip-poster.jpg">
+                </label>
+
+                <label>
+                  <span>Upload video poster</span>
+                  <input type="file" id="homePosterFile" accept="image/*">
+                </label>
+              </div>
+
+              <div class="preview-card">
+                <span>Media strip preview</span>
+                <div id="homeMediaPreview" class="media-preview"></div>
+              </div>
+            </section>
 
             <button type="submit" id="saveButton">Save Product</button>
             <p class="status" id="formStatus"></p>
@@ -93,6 +271,10 @@
                 <h2>Current catalog</h2>
               </div>
             </div>
+
+            <p class="section-copy-admin">
+              Edit or remove products here. Product previews and gallery images update from this same catalog.
+            </p>
 
             <div class="product-list" id="productList"></div>
           </article>

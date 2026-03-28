@@ -21,9 +21,9 @@
     <div class="nav__panel" [class.nav__panel--active]="open">
       <div class="links">
         <a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="close()">Home</a>
-        <a [routerLink]="['/']" fragment="showcase" (click)="close()">Shop</a>
+        <a [routerLink]="['/']" fragment="showcase" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="close()">Products</a>
         <a routerLink="/about" routerLinkActive="active" (click)="close()">About</a>
-        <a routerLink="/vlog" routerLinkActive="active" (click)="close()">Vlog</a>
+        <a routerLink="/blog" routerLinkActive="active" (click)="close()">Blog</a>
       </div>
     </div>
 

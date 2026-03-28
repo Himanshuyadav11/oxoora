@@ -12,7 +12,7 @@ export class NavbarComponent {
     'Refined Leather Essentials',
     'Motion-Led Campaign Reels',
     'Hand-Finished Buckle Details',
-    'About, Vlog, And Showcase'
+    'About, Blog, And Showcase'
   ];
 
   toggleMenu(): void {

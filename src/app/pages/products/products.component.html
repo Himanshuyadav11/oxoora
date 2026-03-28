@@ -33,7 +33,7 @@
       <h2>{{ product.name }}</h2>
       <p>{{ product.description }}</p>
       <strong>{{ product.price }}</strong>
-      <button class="shop-link" type="button" (click)="openProductLink(product.link)">Shop Now</button>
+      <a class="shop-link" [routerLink]="['/products', product.id]">Open Preview</a>
     </article>
   </section>
 
@@ -55,7 +55,7 @@
         <div class="product-card__copy">
           <h3>{{ product.name }}</h3>
           <p>{{ product.price }}</p>
-          <button class="shop-link" type="button" (click)="openProductLink(product.link)">Shop Now</button>
+          <a class="shop-link" [routerLink]="['/products', product.id]">Open Preview</a>
         </div>
       </article>
     </div>

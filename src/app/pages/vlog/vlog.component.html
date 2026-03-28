@@ -3,19 +3,12 @@
 <div class="vlog-page">
   <section class="vlog-hero page-width">
     <div class="vlog-hero__copy" appReveal>
-      <p class="eyebrow">Vlog / Motion Reel</p>
-      <h1>A premium film gallery designed to play in order, feel smooth, and stay easy to control.</h1>
+      <p class="eyebrow">Blog / Motion Reel</p>
+      <h1>A premium film gallery designed to feel smooth, simple, and easy to browse.</h1>
       <p class="section-copy">
-        The heavy product videos now live inside a smarter reel instead of fighting each other on the page. One film is
-        active at a time, hover previews stay lightweight, and every clip can be played, paused, previewed, or downloaded.
+        The product films now live inside a cleaner reel. One film stays active at a time, hover previews remain lightweight,
+        and the page avoids extra public controls.
       </p>
-
-      <div class="vlog-hero__actions media-actions">
-        <button class="lux-button" type="button" (click)="toggleActivePlayback()">
-          {{ isMainPlaying ? 'Pause Active Film' : 'Play Active Film' }}
-        </button>
-        <a class="lux-button--ghost" [href]="activeFilm.src" [attr.download]="activeFilm.downloadName">Download Active Film</a>
-      </div>
     </div>
 
     <article class="vlog-player surface-card" appReveal [appRevealDelay]="130">
@@ -28,8 +21,6 @@
           muted
           playsinline
           preload="metadata"
-          (play)="trackActiveState(true)"
-          (pause)="trackActiveState(false)"
         ></video>
       </div>
 
@@ -39,7 +30,6 @@
           <h2>{{ activeFilm.title }}</h2>
           <p>{{ activeFilm.copy }}</p>
         </div>
-        <button class="button-chip" type="button" (click)="openFilmPreview(activeFilm)">Open Full Preview</button>
       </div>
     </article>
   </section>
@@ -85,11 +75,6 @@
               <p>{{ film.copy }}</p>
             </div>
           </button>
-
-          <div class="film-slide__actions">
-            <button class="button-chip" type="button" (click)="openFilmPreview(film)">Preview</button>
-            <a class="button-chip" [href]="film.src" [attr.download]="film.downloadName">Download</a>
-          </div>
         </article>
       </div>
     </div>
@@ -152,6 +137,4 @@
       </div>
     </article>
   </section>
-
-  <app-media-lightbox [media]="previewMedia" (closed)="closePreview()"></app-media-lightbox>
 </div>

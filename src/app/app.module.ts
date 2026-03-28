@@ -7,6 +7,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AboutComponent } from './pages/about/about.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ProductPreviewComponent } from './pages/product-preview/product-preview.component';
+import { ProductsComponent } from './pages/products/products.component';
 import { VlogComponent } from './pages/vlog/vlog.component';
 import { ParallaxDirective } from './shared/directives/parallax.directive';
 import { RevealOnScrollDirective } from './shared/directives/reveal-on-scroll.directive';
@@ -19,6 +21,8 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
     AppComponent,
     AboutComponent,
     HomeComponent,
+    ProductsComponent,
+    ProductPreviewComponent,
     VlogComponent,
     RevealOnScrollDirective,
     ParallaxDirective,

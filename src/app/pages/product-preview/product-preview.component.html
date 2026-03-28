@@ -1,0 +1,161 @@
+<ng-container *ngIf="isLoading; else previewResolved">
+  <div class="preview-page preview-page--loading">
+    <app-navbar></app-navbar>
+
+    <section class="preview-empty page-width">
+      <article class="preview-empty__panel surface-card">
+        <p class="eyebrow">Loading</p>
+        <h1>Preparing the product preview.</h1>
+      </article>
+    </section>
+  </div>
+</ng-container>
+
+<ng-template #previewResolved>
+<ng-container *ngIf="pageModel as view; else previewNotFound">
+  <div class="preview-page">
+    <app-navbar></app-navbar>
+
+    <section class="preview-shell page-width">
+      <div class="preview-breadcrumbs">
+        <a routerLink="/">Home</a>
+        <span>/</span>
+        <a [routerLink]="['/']" fragment="showcase">Products</a>
+        <span>/</span>
+        <span>{{ view.product.name }}</span>
+      </div>
+
+      <div class="preview-layout">
+        <section class="preview-gallery surface-card" appReveal>
+          <div class="preview-gallery__stage">
+            <img [src]="selectedGallery?.src" [alt]="selectedGallery?.alt || view.product.name">
+          </div>
+
+          <div class="preview-gallery__thumbs">
+            <button
+              class="preview-thumb"
+              type="button"
+              *ngFor="let item of view.gallery; let index = index"
+              [class.is-active]="selectedGalleryIndex === index"
+              [attr.aria-label]="'Open ' + item.label"
+              (click)="selectGalleryItem(index)"
+            >
+              <img [src]="item.src" [alt]="item.alt" loading="lazy">
+              <span>{{ item.label }}</span>
+            </button>
+          </div>
+        </section>
+
+        <aside class="preview-summary" appReveal [appRevealDelay]="120">
+          <p class="eyebrow">{{ view.primaryCategory?.title || 'Product' }}</p>
+          <h1>{{ view.product.name }}</h1>
+          <p class="preview-summary__delivery" *ngIf="view.product.deliveryText">
+            {{ view.product.deliveryText }}
+          </p>
+
+          <div class="preview-summary__price-row">
+            <strong class="preview-summary__price">{{ view.product.price }}</strong>
+            <span class="preview-summary__compare" *ngIf="view.product.comparePrice">
+              {{ view.product.comparePrice }}
+            </span>
+          </div>
+
+          <p class="preview-summary__color" *ngIf="view.product.colorName">
+            <span>Color:</span> {{ view.product.colorName }}
+          </p>
+
+          <p class="preview-summary__copy">{{ view.product.description }}</p>
+
+          <div class="preview-summary__actions media-actions">
+            <a
+              *ngIf="hasExternalLink(view.product.link); else browseCollectionButton"
+              class="lux-button"
+              [href]="view.product.link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Buy Now
+            </a>
+
+            <ng-template #browseCollectionButton>
+              <a class="lux-button" [routerLink]="['/']" fragment="showcase">Browse Products</a>
+            </ng-template>
+
+            <a class="lux-button--ghost" [routerLink]="['/']" fragment="showcase">Back To Products</a>
+          </div>
+
+          <div class="preview-accordion">
+            <article class="preview-accordion__item" *ngFor="let section of view.sections">
+              <button type="button" (click)="toggleSection(section.id)">
+                <span>{{ section.title }}</span>
+                <strong>{{ isSectionOpen(section.id) ? '-' : '+' }}</strong>
+              </button>
+
+              <div class="preview-accordion__content" *ngIf="isSectionOpen(section.id)">
+                <p>{{ section.content }}</p>
+              </div>
+            </article>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-shell">
+      <div class="page-width preview-related">
+        <div class="preview-related__head" appReveal>
+          <div>
+            <p class="eyebrow">More From Oxoora</p>
+            <h2 class="section-title">Other products</h2>
+          </div>
+          <a class="lux-link" [routerLink]="['/']" fragment="showcase">See All Products</a>
+        </div>
+
+        <div class="preview-related__grid">
+          <article
+            class="preview-related__card surface-card"
+            *ngFor="let related of view.relatedProducts; let index = index"
+            appReveal
+            [appRevealDelay]="index * 80"
+          >
+            <div class="preview-related__image">
+              <img [src]="related.image" [alt]="related.name" loading="lazy">
+            </div>
+
+            <div class="preview-related__copy">
+              <p class="eyebrow">{{ related.categoryTitle }}</p>
+              <h3>{{ related.name }}</h3>
+              <p>{{ related.description }}</p>
+
+              <div class="preview-related__meta">
+                <strong>{{ related.price }}</strong>
+                <a class="button-chip" [routerLink]="['/products', related.id]">Open Preview</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </div>
+</ng-container>
+</ng-template>
+
+<ng-template #previewNotFound>
+  <div class="preview-page preview-page--empty">
+    <app-navbar></app-navbar>
+
+    <section class="preview-empty page-width">
+      <article class="preview-empty__panel surface-card">
+        <p class="eyebrow">Product not found</p>
+        <h1>This preview is not available right now.</h1>
+        <p class="section-copy">
+          The product link may be old, or the catalog entry may have changed.
+        </p>
+
+        <div class="media-actions">
+          <a class="lux-button" [routerLink]="['/']" fragment="showcase">Back To Products</a>
+          <a class="lux-button--ghost" routerLink="/">Go Home</a>
+        </div>
+      </article>
+    </section>
+  </div>
+</ng-template>

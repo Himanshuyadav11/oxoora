@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { PreviewMedia } from '../../data/brand-media';
 import { ProductCategory, ProductItem } from '../../data/product-catalog';
 import { ProductCatalogService } from '../../services/product-catalog.service';
 
@@ -25,24 +24,21 @@ type CollectionHighlight = ProductCategory & {
 
 type ShowcaseProduct = ProductItem & {
   categoryTitle: string;
-  preview: PreviewMedia;
-  downloadName: string;
+};
+
+type HomeFeatureCard = ProductItem & {
+  categoryTitle: string;
+  mediaType: 'image' | 'video';
+  mediaSrc: string;
+  mediaPoster: string;
+  cardLabel: string;
+  cardHeadline: string;
 };
 
 type HomeSocialLink = {
   icon: 'instagram' | 'facebook' | 'youtube' | 'whatsapp';
   label: string;
   href: string;
-};
-
-type HomePromoTile = {
-  type: 'ad' | 'image' | 'video';
-  label: string;
-  title: string;
-  copy?: string;
-  image?: string;
-  video?: string;
-  poster?: string;
 };
 
 type FooterBenefit = {
@@ -59,10 +55,10 @@ type FooterBenefit = {
 export class HomeComponent implements OnInit, OnDestroy {
   totalProducts = 0;
   activeSlideIndex = 0;
-  featuredProducts: ShowcaseProduct[] = [];
-  moreProducts: ShowcaseProduct[] = [];
+  topProducts: ShowcaseProduct[] = [];
+  bottomProducts: ShowcaseProduct[] = [];
+  homeFeatureCards: HomeFeatureCard[] = [];
   collectionHighlights: CollectionHighlight[] = [];
-  previewMedia: PreviewMedia | null = null;
   isJoinUsSubmitting = false;
   joinUsStatusMessage = '';
   joinUsStatusType: 'idle' | 'success' | 'error' = 'idle';
@@ -80,19 +76,19 @@ export class HomeComponent implements OnInit, OnDestroy {
       titleLines: ['Out of', 'Office'],
       titleConnector: 'Leather',
       promoEyebrow: 'Premium leather essentials',
-      promoTitle: 'Clean, easy, and ready to shop',
-      promoCopy: 'Shop fast. Watch films. Browse easily on mobile.',
+      promoTitle: 'Clean, simple, and easy to browse',
+      promoCopy: 'All products now sit on the home page for faster browsing.',
       image: 'assets/editorial/hero-man-belt.jpg',
       alt: 'Luxury editorial portrait with belt styling'
     },
     {
       id: 'slide-02',
       label: 'Campaign / 02',
-      titleLines: ['Crafted', 'Motion'],
+      titleLines: ['Crafted', 'Form'],
       titleConnector: 'for',
-      promoEyebrow: 'Smooth video browsing',
-      promoTitle: 'All films in the right order',
-      promoCopy: 'Play, pause, preview, and download without broken video flow.',
+      promoEyebrow: 'Premium styling direction',
+      promoTitle: 'Simple browsing with stronger focus',
+      promoCopy: 'The home page keeps products easy to scan without extra layout clutter.',
       image: 'assets/editorial/hero-suit-portrait.jpg',
       alt: 'Tailored portrait for Oxoora campaign'
     },
@@ -102,42 +98,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       titleLines: ['Modern', 'Heritage'],
       titleConnector: 'meets',
       promoEyebrow: 'Simple and user friendly',
-      promoTitle: 'Less text. Better product focus.',
-      promoCopy: 'A cleaner path to products, About, and Vlog.',
+      promoTitle: 'Fewer buttons. Better product focus.',
+      promoCopy: 'A cleaner path through products, brand story, and films.',
       image: 'assets/editorial/flatlay-accessories.jpg',
       alt: 'Luxury accessories flatlay'
-    }
-  ];
-  readonly promoTiles: HomePromoTile[] = [
-    {
-      type: 'ad',
-      label: 'Ad',
-      title: 'The Style Edit',
-      copy: 'Clean leather, rich finishes, and sharper everyday picks.'
-    },
-    {
-      type: 'image',
-      label: 'Campaign',
-      title: 'Leather in motion',
-      image: 'assets/editorial/hero-suit-portrait.jpg'
-    },
-    {
-      type: 'image',
-      label: 'Travel',
-      title: 'The City Carry',
-      image: 'assets/editorial/flatlay-accessories.jpg'
-    },
-    {
-      type: 'image',
-      label: 'Craft',
-      title: 'Buckle workshop',
-      image: 'assets/editorial/workshop-buckles.jpg'
-    },
-    {
-      type: 'image',
-      label: 'Finish',
-      title: 'Precision stitch',
-      image: 'assets/editorial/western-belt-detail.jpg'
     }
   ];
   readonly footerBenefits: FooterBenefit[] = [
@@ -222,19 +186,23 @@ export class HomeComponent implements OnInit, OnDestroy {
         })
         .filter((category): category is CollectionHighlight => category !== null);
 
-      this.featuredProducts = catalog.products.slice(0, 6).map((product) => ({
+      const mappedProducts = catalog.products.map((product) => ({
         ...product,
-        categoryTitle: this.getPrimaryCategoryTitle(product, categoryMap),
-        preview: this.createProductPreview(product),
-        downloadName: this.createDownloadName(product.name)
+        categoryTitle: this.getPrimaryCategoryTitle(product, categoryMap)
       }));
 
-      this.moreProducts = catalog.products.slice(6, 10).map((product) => ({
-        ...product,
-        categoryTitle: this.getPrimaryCategoryTitle(product, categoryMap),
-        preview: this.createProductPreview(product),
-        downloadName: this.createDownloadName(product.name)
-      }));
+      const firstRowCount = Math.min(4, mappedProducts.length);
+      this.topProducts = mappedProducts.slice(0, firstRowCount);
+      this.bottomProducts = mappedProducts.slice(firstRowCount);
+
+      const selectedFeatureProducts = catalog.products.filter((product) => product.showOnHomePage);
+      const stripSource = selectedFeatureProducts.length > 0
+        ? selectedFeatureProducts.slice(0, 5)
+        : catalog.products.slice(0, 5);
+
+      this.homeFeatureCards = stripSource.map((product, index) =>
+        this.createHomeFeatureCard(product, categoryMap, selectedFeatureProducts.length === 0, index)
+      );
     });
   }
 
@@ -253,14 +221,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   nextSlide(): void {
     this.activeSlideIndex = (this.activeSlideIndex + 1) % this.heroSlides.length;
-  }
-
-  openPreview(media: PreviewMedia): void {
-    this.previewMedia = media;
-  }
-
-  closePreview(): void {
-    this.previewMedia = null;
   }
 
   submitJoinUs(): void {
@@ -322,20 +282,67 @@ export class HomeComponent implements OnInit, OnDestroy {
     return category?.title ?? 'Signature Piece';
   }
 
-  private createProductPreview(product: ProductItem): PreviewMedia {
+  private createHomeFeatureCard(
+    product: ProductItem,
+    categoryMap: Map<string, ProductCategory>,
+    useFallbackMedia: boolean,
+    index: number
+  ): HomeFeatureCard {
+    const fallback = FALLBACK_MEDIA_STRIP[index % FALLBACK_MEDIA_STRIP.length];
+    const categoryTitle = this.getPrimaryCategoryTitle(product, categoryMap);
+    const usesVideo =
+      product.homeMediaType === 'video' &&
+      typeof product.homeMediaPath === 'string' &&
+      product.homeMediaPath.trim().length > 0;
+
+    const mediaType = usesVideo ? 'video' : (useFallbackMedia ? fallback.mediaType : 'image');
+    const mediaSrc =
+      product.homeMediaPath?.trim() ||
+      (useFallbackMedia ? fallback.src : product.image);
+    const mediaPoster =
+      product.homeMediaPoster?.trim() ||
+      (useFallbackMedia ? fallback.poster : product.image);
+
     return {
-      type: 'image',
-      id: `${product.id}-preview`,
-      label: 'Product Preview',
-      title: product.name,
-      copy: product.description,
-      src: product.image,
-      alt: product.name,
-      downloadName: this.createDownloadName(product.name)
+      ...product,
+      categoryTitle,
+      mediaType,
+      mediaSrc,
+      mediaPoster,
+      cardLabel: product.homeCopy || categoryTitle,
+      cardHeadline: product.homeHeadline || product.name
     };
   }
-
-  private createDownloadName(name: string): string {
-    return `oxoora-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.jpg`;
-  }
 }
+
+const FALLBACK_MEDIA_STRIP: Array<{
+  mediaType: 'image' | 'video';
+  src: string;
+  poster: string;
+}> = [
+  {
+    mediaType: 'image',
+    src: 'assets/images/life.jpg',
+    poster: 'assets/images/life.jpg'
+  },
+  {
+    mediaType: 'video',
+    src: 'assets/video/hero.mp4',
+    poster: 'assets/images/hero.jpg'
+  },
+  {
+    mediaType: 'video',
+    src: 'assets/video/v1.mp4',
+    poster: 'assets/editorial/hero-suit-portrait.jpg'
+  },
+  {
+    mediaType: 'image',
+    src: 'assets/editorial/dark-suit-portrait.jpg',
+    poster: 'assets/editorial/dark-suit-portrait.jpg'
+  },
+  {
+    mediaType: 'video',
+    src: 'assets/video/style-close-up.mp4',
+    poster: 'assets/editorial/workshop-buckles.jpg'
+  }
+];

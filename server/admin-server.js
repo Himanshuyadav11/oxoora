@@ -19,8 +19,8 @@ const UPLOAD_DIR = path.resolve(process.env.UPLOAD_DIR || path.join(ROOT, 'produ
 const LEGACY_CATALOG_FILE = path.join(ROOT, 'src', 'assets', 'data', 'product-catalog.json');
 const SESSION_TIMEOUT_MS = 10 * 60 * 1000;
 
-const ADMIN_ID = process.env.ADMIN_ID || 'himanshu';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '9680706015';
+const ADMIN_ID = String(process.env.ADMIN_ID || 'HIMANSHU').trim();
+const ADMIN_PASSWORD = String(process.env.ADMIN_PASSWORD || '9680706015');
 const SESSION_COOKIE = 'oxoora_admin_session';
 
 const sessions = new Map();
@@ -36,12 +36,15 @@ const upload = multer({
   storage: multer.diskStorage({
     destination: (_req, _file, cb) => cb(null, UPLOAD_DIR),
     filename: (_req, file, cb) => cb(null, sanitizeFileName(file.originalname))
-  })
+  }),
+  limits: {
+    fileSize: 120 * 1024 * 1024
+  }
 });
 
 app.disable('x-powered-by');
 app.use(applyDevCors);
-app.use(express.json({ limit: '5mb' }));
+app.use(express.json({ limit: '15mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/product-uploads', express.static(UPLOAD_DIR));
 app.use('/assets', express.static(resolveAssetsDirectory()));
@@ -134,8 +137,8 @@ function sanitizeFileName(fileName) {
   return `${Date.now()}-${safeBase}${extension}`;
 }
 
-function normalizeStoredImagePath(imagePath) {
-  const trimmed = String(imagePath || '').trim();
+function normalizeStoredMediaPath(mediaPath) {
+  const trimmed = String(mediaPath || '').trim();
   if (!trimmed) {
     return '';
   }
@@ -146,6 +149,10 @@ function normalizeStoredImagePath(imagePath) {
       if (parsed.pathname.startsWith('/product-uploads/')) {
         return parsed.pathname;
       }
+
+      if (parsed.pathname.startsWith('/assets/')) {
+        return parsed.pathname;
+      }
     } catch (_error) {
       return trimmed;
     }
@@ -154,28 +161,24 @@ function normalizeStoredImagePath(imagePath) {
   return trimmed;
 }
 
-function resolveImagePathForRequest(req, imagePath) {
-  if (!imagePath) {
-    return imagePath;
+function resolveMediaPathForRequest(req, mediaPath) {
+  if (!mediaPath) {
+    return '';
   }
 
-  if (/^https?:\/\//i.test(imagePath)) {
-    return imagePath;
+  if (/^https?:\/\//i.test(mediaPath)) {
+    return mediaPath;
   }
 
-  if (imagePath.startsWith('assets/')) {
-    return `${req.protocol}://${req.get('host')}/${imagePath}`;
+  if (mediaPath.startsWith('assets/')) {
+    return `${req.protocol}://${req.get('host')}/${mediaPath}`;
   }
 
-  if (imagePath.startsWith('/assets/')) {
-    return `${req.protocol}://${req.get('host')}${imagePath}`;
+  if (mediaPath.startsWith('/assets/') || mediaPath.startsWith('/product-uploads/')) {
+    return `${req.protocol}://${req.get('host')}${mediaPath}`;
   }
 
-  if (imagePath.startsWith('/product-uploads/')) {
-    return `${req.protocol}://${req.get('host')}${imagePath}`;
-  }
-
-  return `${req.protocol}://${req.get('host')}/${imagePath.replace(/^\/+/, '')}`;
+  return `${req.protocol}://${req.get('host')}/${mediaPath.replace(/^\/+/, '')}`;
 }
 
 function getCatalogForRequest(req) {
@@ -185,8 +188,76 @@ function getCatalogForRequest(req) {
     categories: catalog.categories,
     products: catalog.products.map((product) => ({
       ...product,
-      image: resolveImagePathForRequest(req, product.image)
+      image: resolveMediaPathForRequest(req, product.image),
+      homeMediaPath: resolveMediaPathForRequest(req, product.homeMediaPath),
+      homeMediaPoster: resolveMediaPathForRequest(req, product.homeMediaPoster),
+      gallery: (product.gallery || []).map((item) => ({
+        ...item,
+        src: resolveMediaPathForRequest(req, item.src)
+      }))
     }))
+  };
+}
+
+function normalizeGalleryItems(gallery) {
+  if (!Array.isArray(gallery)) {
+    return [];
+  }
+
+  return gallery
+    .map((item, index) => ({
+      src: normalizeStoredMediaPath(item?.src),
+      alt: String(item?.alt || '').trim(),
+      label: String(item?.label || '').trim(),
+      colorName: String(item?.colorName || '').trim(),
+      sortOrder: Number.isFinite(Number(item?.sortOrder)) ? Number(item.sortOrder) : index
+    }))
+    .filter((item) => item.src)
+    .sort((left, right) => left.sortOrder - right.sortOrder)
+    .map((item, index) => ({
+      ...item,
+      sortOrder: index
+    }));
+}
+
+function normalizeBooleanFlag(value) {
+  return value === true || value === 'true' || value === 1 || value === '1' || value === 'on';
+}
+
+function normalizeHomeMediaType(value) {
+  return value === 'video' ? 'video' : 'image';
+}
+
+function parseProductPayload(body) {
+  const gallery = normalizeGalleryItems(body?.gallery);
+  const showOnHomePage = normalizeBooleanFlag(body?.showOnHomePage);
+  const homeMediaType = normalizeHomeMediaType(body?.homeMediaType);
+  const image = normalizeStoredMediaPath(body?.image) || gallery[0]?.src || '';
+  const homeMediaPath = normalizeStoredMediaPath(body?.homeMediaPath);
+
+  return {
+    id: String(body?.id || '').trim(),
+    name: String(body?.name || '').trim(),
+    price: String(body?.price || '').trim(),
+    image,
+    description: String(body?.description || '').trim(),
+    link: String(body?.link || '').trim(),
+    comparePrice: String(body?.comparePrice || '').trim(),
+    deliveryText: String(body?.deliveryText || '').trim(),
+    colorName: String(body?.colorName || '').trim(),
+    details: String(body?.details || '').trim(),
+    warranty: String(body?.warranty || '').trim(),
+    moreInformation: String(body?.moreInformation || '').trim(),
+    showOnHomePage,
+    homeHeadline: String(body?.homeHeadline || '').trim(),
+    homeCopy: String(body?.homeCopy || '').trim(),
+    homeMediaType,
+    homeMediaPath: homeMediaPath || (showOnHomePage && homeMediaType === 'image' ? image : ''),
+    homeMediaPoster: normalizeStoredMediaPath(body?.homeMediaPoster),
+    categories: Array.isArray(body?.categories)
+      ? body.categories.map((categoryId) => String(categoryId).trim()).filter(Boolean)
+      : [],
+    gallery
   };
 }
 
@@ -206,7 +277,7 @@ function validateProduct(product, categories, existingProducts, currentId = null
   }
 
   if (!product.image || typeof product.image !== 'string') {
-    errors.push('Product image path is required.');
+    errors.push('Main product image is required.');
   }
 
   if (!product.description || typeof product.description !== 'string') {
@@ -226,6 +297,10 @@ function validateProduct(product, categories, existingProducts, currentId = null
     if (!validCategoryIds.has(categoryId)) {
       errors.push(`Invalid category: ${categoryId}`);
     }
+  }
+
+  if (product.showOnHomePage && product.homeMediaType === 'video' && !product.homeMediaPath) {
+    errors.push('Upload or enter a home page video path.');
   }
 
   const duplicate = existingProducts.find(
@@ -283,6 +358,22 @@ function sendStorefront(req, res) {
     .send('Storefront build not found. Run "npm run build" before using the production server.');
 }
 
+function handleMediaUpload(req, res) {
+  if (!req.file) {
+    res.status(400).json({ message: 'No file uploaded.' });
+    return;
+  }
+
+  const storedPath = `/product-uploads/${encodeURIComponent(req.file.filename)}`;
+  const resolvedPath = resolveMediaPathForRequest(req, storedPath);
+
+  res.json({
+    mediaPath: resolvedPath,
+    imagePath: resolvedPath,
+    storedPath
+  });
+}
+
 app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
@@ -316,8 +407,9 @@ app.get('/api/me', (req, res) => {
 
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body || {};
+  const normalizedUsername = String(username || '').trim().toUpperCase();
 
-  if (username !== ADMIN_ID || password !== ADMIN_PASSWORD) {
+  if (normalizedUsername !== ADMIN_ID.toUpperCase() || String(password || '') !== ADMIN_PASSWORD) {
     res.status(401).json({ message: 'Invalid credentials' });
     return;
   }
@@ -366,34 +458,14 @@ app.get('/api/leads/export', requireAuth, (_req, res) => {
   res.send(workbookBuffer);
 });
 
-app.post('/api/upload-image', requireAuth, upload.single('image'), (req, res) => {
-  if (!req.file) {
-    res.status(400).json({ message: 'No image uploaded.' });
-    return;
-  }
-
-  const storedPath = `/product-uploads/${encodeURIComponent(req.file.filename)}`;
-  res.json({
-    imagePath: resolveImagePathForRequest(req, storedPath),
-    storedPath
-  });
-});
+app.post('/api/upload-media', requireAuth, upload.single('media'), handleMediaUpload);
+app.post('/api/upload-image', requireAuth, upload.single('image'), handleMediaUpload);
 
 app.post('/api/products', requireAuth, (req, res) => {
   const catalog = store.getCatalog();
-  const payload = {
-    id: String(req.body?.id || '').trim(),
-    name: String(req.body?.name || '').trim(),
-    price: String(req.body?.price || '').trim(),
-    image: normalizeStoredImagePath(req.body?.image),
-    description: String(req.body?.description || '').trim(),
-    link: String(req.body?.link || '').trim(),
-    categories: Array.isArray(req.body?.categories)
-      ? req.body.categories.map((categoryId) => String(categoryId).trim()).filter(Boolean)
-      : []
-  };
-
+  const payload = parseProductPayload(req.body);
   const errors = validateProduct(payload, catalog.categories, catalog.products);
+
   if (errors.length > 0) {
     res.status(400).json({ message: errors.join(' ') });
     return;
@@ -402,10 +474,7 @@ app.post('/api/products', requireAuth, (req, res) => {
   const product = store.saveCatalogProduct(payload);
   res.json({
     success: true,
-    product: {
-      ...product,
-      image: resolveImagePathForRequest(req, product.image)
-    }
+    product: getCatalogForRequest(req).products.find((item) => item.id === product.id) || product
   });
 });
 
@@ -418,19 +487,9 @@ app.put('/api/products/:id', requireAuth, (req, res) => {
   }
 
   const catalog = store.getCatalog();
-  const payload = {
-    id: String(req.body?.id || '').trim(),
-    name: String(req.body?.name || '').trim(),
-    price: String(req.body?.price || '').trim(),
-    image: normalizeStoredImagePath(req.body?.image),
-    description: String(req.body?.description || '').trim(),
-    link: String(req.body?.link || '').trim(),
-    categories: Array.isArray(req.body?.categories)
-      ? req.body.categories.map((categoryId) => String(categoryId).trim()).filter(Boolean)
-      : []
-  };
-
+  const payload = parseProductPayload(req.body);
   const errors = validateProduct(payload, catalog.categories, catalog.products, currentId);
+
   if (errors.length > 0) {
     res.status(400).json({ message: errors.join(' ') });
     return;
@@ -439,10 +498,7 @@ app.put('/api/products/:id', requireAuth, (req, res) => {
   const product = store.saveCatalogProduct(payload, currentId);
   res.json({
     success: true,
-    product: {
-      ...product,
-      image: resolveImagePathForRequest(req, product.image)
-    }
+    product: getCatalogForRequest(req).products.find((item) => item.id === product.id) || product
   });
 });
 

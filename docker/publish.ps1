@@ -17,13 +17,15 @@ function Assert-DockerReady {
   }
 }
 
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repoRoot = (Resolve-Path (Join-Path $scriptDir "..")).Path
+$dockerfile = Join-Path $scriptDir "Dockerfile"
 $fullTag = "${ImageName}:${Tag}"
-$dockerfile = Join-Path $PSScriptRoot "docker\\Dockerfile"
 
 Assert-DockerReady
 
 Write-Host "Building $fullTag ..."
-docker build --platform $Platform -f $dockerfile -t $fullTag .
+docker build --platform $Platform -f $dockerfile -t $fullTag $repoRoot
 
 if ($Tag -ne "latest") {
   $latestTag = "${ImageName}:latest"

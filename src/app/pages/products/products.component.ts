@@ -51,17 +51,4 @@ export class ProductsComponent implements OnInit {
       this.highlightedProduct = this.categorySections[0]?.products[0] ?? catalog.products[0] ?? null;
     });
   }
-
-  openProductLink(link: string): void {
-    if (!link || link === '#') {
-      return;
-    }
-
-    if (link.startsWith('http://') || link.startsWith('https://')) {
-      window.open(link, '_blank', 'noopener,noreferrer');
-      return;
-    }
-
-    window.location.href = link;
-  }
 }

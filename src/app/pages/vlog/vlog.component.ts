@@ -7,7 +7,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { ATELIER_CLIPS, BRAND_FILMS, BrandFilm, PreviewMedia } from '../../data/brand-media';
+import { ATELIER_CLIPS, BRAND_FILMS, BrandFilm } from '../../data/brand-media';
 
 type StyleNote = {
   title: string;
@@ -24,8 +24,6 @@ export class VlogComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('previewPlayer') previewPlayers?: QueryList<ElementRef<HTMLVideoElement>>;
 
   activeFilmIndex = 0;
-  previewMedia: PreviewMedia | null = null;
-  isMainPlaying = false;
   loadedFilmIds = new Set<string>([BRAND_FILMS[0].id]);
 
   readonly films = BRAND_FILMS;
@@ -68,25 +66,6 @@ export class VlogComponent implements AfterViewInit, OnDestroy {
     this.syncActiveVideo(true);
   }
 
-  toggleActivePlayback(): void {
-    const player = this.heroPlayer?.nativeElement;
-
-    if (!player) {
-      return;
-    }
-
-    if (player.paused) {
-      const playAttempt = player.play();
-      playAttempt?.catch(() => {
-        this.isMainPlaying = false;
-      });
-      return;
-    }
-
-    player.pause();
-    this.isMainPlaying = false;
-  }
-
   playPreview(index: number): void {
     if (!this.canHoverPreview()) {
       return;
@@ -124,27 +103,6 @@ export class VlogComponent implements AfterViewInit, OnDestroy {
     previewPlayer.currentTime = 0;
   }
 
-  openFilmPreview(film: BrandFilm): void {
-    this.previewMedia = {
-      type: 'video',
-      id: film.id,
-      label: film.label,
-      title: film.title,
-      copy: film.copy,
-      src: film.src,
-      poster: film.poster,
-      downloadName: film.downloadName
-    };
-  }
-
-  closePreview(): void {
-    this.previewMedia = null;
-  }
-
-  trackActiveState(state: boolean): void {
-    this.isMainPlaying = state;
-  }
-
   private syncActiveVideo(autoplay: boolean): void {
     setTimeout(() => {
       const player = this.heroPlayer?.nativeElement;
@@ -158,18 +116,11 @@ export class VlogComponent implements AfterViewInit, OnDestroy {
       player.load();
 
       if (!autoplay) {
-        this.isMainPlaying = false;
         return;
       }
 
       const playAttempt = player.play();
-      playAttempt
-        ?.then(() => {
-          this.isMainPlaying = true;
-        })
-        .catch(() => {
-          this.isMainPlaying = false;
-        });
+      playAttempt?.catch(() => undefined);
     });
   }
 

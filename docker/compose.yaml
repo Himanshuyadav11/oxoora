@@ -2,7 +2,7 @@ services:
   oxoora:
     image: ${IMAGE_NAME:-oxoora:latest}
     build:
-      context: .
+      context: ..
       dockerfile: ./docker/Dockerfile
     restart: unless-stopped
     ports:
@@ -15,5 +15,5 @@ services:
       ADMIN_ID: ${ADMIN_ID:-HIMANSHU}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-9680706015}
     volumes:
-      - ./data:/app/data
-      - ./product-uploads:/app/product-uploads
+      - ../data:/app/data
+      - ../product-uploads:/app/product-uploads
